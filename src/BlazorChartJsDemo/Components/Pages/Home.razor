@@ -1,7 +1,47 @@
 ﻿@page "/"
+@using BlazorChartJsDemo.Models
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (_chartModel != null)
+{
+    <Chart @ref="chartRef" Model="_chartModel" />
+}
 
-Welcome to your new app.
+<button @onclick="AddNumberAsync">Add a random number</button>
+
+@code
+{
+    private Chart? chartRef = default!;
+
+    private readonly LinkedList<int> _numbers = new LinkedList<int>();
+    private ChartModel? _chartModel;
+
+    protected override void OnInitialized()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            _numbers.AddFirst(GetNewNumber());
+        }
+        _chartModel = CreateChartModel(_numbers);
+    }
+
+    private async Task AddNumberAsync()
+    {
+        _numbers.AddFirst(GetNewNumber());
+        _numbers.RemoveLast();
+
+        _chartModel = CreateChartModel(_numbers);
+        StateHasChanged();
+
+        if (chartRef != null)
+        {
+            await chartRef.UpdateChartAsync();
+        }
+    }
+
+    private int GetNewNumber()
+    {
+        return int.Clamp(Random.Shared.Next(-3, 4) + _numbers.First?.Value ?? 0, 0, 9);
+    }
+}

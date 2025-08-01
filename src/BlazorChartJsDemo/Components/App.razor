@@ -7,6 +7,8 @@
     <base href="/" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["BlazorChartJsDemo.styles.css"]" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./chartModule.js" type="module"></script>
     <ImportMap />
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
@@ -14,6 +16,7 @@
 <body>
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
+
 </body>
 
 </html>

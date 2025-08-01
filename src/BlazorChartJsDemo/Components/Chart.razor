@@ -1,0 +1,28 @@
+﻿@using BlazorChartJsDemo.Models
+@inject IJSRuntime JSRuntime
+
+<div style="max-width: 800px; max-height: 800px">
+    <canvas @ref="@_canvasRef" id="myChart"></canvas>
+</div>
+
+@code
+{
+    private ElementReference _canvasRef;
+
+    [Parameter, EditorRequired]
+    public required ChartModel Model { get; init; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("createChart", _canvasRef, Model);
+        }
+    }
+
+    public async Task UpdateChartAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("updateChart", _canvasRef, Model);
+
+    }
+}
